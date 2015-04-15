@@ -40,8 +40,8 @@ public class MainActivity {
 
         //Change value below to generate a pattern different length. Currently 4 freq after signature
         //Change by Debasish - 24March
-        //int noOfFreqInPattern = 4;
-        int noOfFreqInPattern = 7;  //
+        int noOfFreqInPattern = 4;
+        //int noOfFreqInPattern = 7;  //
 
         //inputFile location
         String pathFile = "./src/resources/patterns.xls";
@@ -50,12 +50,13 @@ public class MainActivity {
 
         //Defining signature frequency for TV based audio pixel
         String SignatureFreq = "18000";
+        //String SignatureFreq = "18000";
 
         //Allowed Freq Array (Put 19 frequency other web signature values)
 
         //Change by Debasish - 24 March 2015
-        //String[] AllowedFreq = {"18151","18251","18351","18451","18551","18651","18751","18851","18951","19051","19151","19251","19351","19451","19551","19651","19751","19851"};
-        String[] AllowedFreq = {"18150","18225","18300","18375","18450","18525","18600","18675","18750","18825","18900","18975","19050","19125","19200","19275","19350","19425","19500","19575","19650","19725","19800","19875"};
+        String[] AllowedFreq = {"18151","18251","18351","18451","18551","18651","18751","18851","18951","19051","19151","19251","19351","19451","19551","19651","19751","19851"};
+        //String[] AllowedFreq = {"18150","18225","18300","18375","18450","18525","18600","18675","18750","18825","18900","18975","19050","19125","19200","19275","19350","19425","19500","19575","19650","19725","19800","19875"};
         //18225 - D,18450 -G
         //Initializing var singlepattern with signaturefreq
         String[] SinglePattern = new String[noOfFreqInPattern+1];
@@ -163,8 +164,8 @@ public class MainActivity {
 
 
     public static void GenerateAudioFile(String[] freqPattern, String campaignName) {
-        int iterationFreqPattern = 5; // Total playing time 700 msecs
-        int noOfFreqs = 8; //8
+        int iterationFreqPattern = 2; // Total playing time 700 msecs
+        int noOfFreqs =5; //8
         double duration = 0.1; // seconds per individual freq in 8 freq pattern
         // block making total 800 msecs
         final int sampleRate = 44100;
@@ -173,9 +174,9 @@ public class MainActivity {
 
         int extraRampFactor = 1;
 
-        final byte generatedSnds[] = new byte[2 * numSamples * 8];
+        //final byte generatedSnds[] = new byte[2 * numSamples * 8];
         // Changed by Debasish - 24th March
-        //final byte generatedSnds[] = new byte[2 * numSamples * 5];
+        final byte generatedSnds[] = new byte[2 * numSamples * 5];
 
         // multiplication
         // factor is
@@ -186,7 +187,7 @@ public class MainActivity {
         // pattern
         // of 8
         // freqs
-        final byte generatedSndsFin[] = new byte[2 * numSamples * 8
+        final byte generatedSndsFin[] = new byte[2 * numSamples * 5
                 * iterationFreqPattern]; // takes iterations into account
         // loop start for 8 iterations for different freqs
         for (int j = 0; j < noOfFreqs; j++) {
@@ -206,7 +207,7 @@ public class MainActivity {
             for (int i = 0; i < numSamples; ++i) {
                 // sample[i] = Math.sin(2 * Math.PI * i /
                 // (sampleRate/freqOfTone));
-                sample[i] = 0.85 * Math.sin((2 * Math.PI - .001) * i / (sampleRate / freqOfTone));
+                sample[i] = 0.6 * Math.sin((2 * Math.PI - .001) * i / (sampleRate / freqOfTone));
             }
 
             // convert to 16 bit pcm sound array
