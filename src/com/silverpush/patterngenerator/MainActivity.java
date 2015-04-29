@@ -172,7 +172,7 @@ public class MainActivity {
         final int numSamples = (int) Math.floor(duration * sampleRate);
         final double sample[] = new double[numSamples];
 
-        int extraRampFactor = 1;
+        //int extraRampFactor = 1;
 
         //final byte generatedSnds[] = new byte[2 * numSamples * 8];
         // Changed by Debasish - 24th March
@@ -191,14 +191,14 @@ public class MainActivity {
                 * iterationFreqPattern]; // takes iterations into account
         // loop start for 8 iterations for different freqs
         for (int j = 0; j < noOfFreqs; j++) {
-            if(j==0 || j == (noOfFreqs-1))
-            {
-                extraRampFactor = 2;
-            }
-            else
-            {
-                extraRampFactor = 1;
-            }
+//            if(j==0 || j == (noOfFreqs-1))
+//            {
+//                extraRampFactor = 2;
+//            }
+//            else
+//            {
+//                extraRampFactor = 1;
+//            }
             double freqOfTone = Double.parseDouble(freqPattern[j]); // hz
 
             final byte generatedSnd[] = new byte[2 * numSamples];
@@ -207,25 +207,24 @@ public class MainActivity {
             for (int i = 0; i < numSamples; ++i) {
                 // sample[i] = Math.sin(2 * Math.PI * i /
                 // (sampleRate/freqOfTone));
-                sample[i] = 0.6 * Math.sin((2 * Math.PI - .001) * i / (sampleRate / freqOfTone));
+                sample[i] =  Math.sin((2 * Math.PI - .001) * i / (sampleRate / freqOfTone));
             }
 
             // convert to 16 bit pcm sound array
             // assumes the sample buffer is normalised.
             int idx = 0;
-            int ramp = numSamples / 20;
+            int ramp = numSamples / 5;
 
             for (int i = 0; i < ramp; i++) {
                 // scale to maximum amplitude
-                final short val = (short) ((sample[i] * 32767) * i /(ramp * extraRampFactor));
+                final short val = (short) ((sample[i] * 32767) * (1/(1+ Math.pow(1.005,-i)) - 0.5));
                 // in 16 bit wav PCM, first byte is the low order byte
                 generatedSnd[idx++] = (byte) (val & 0x00ff);
                 generatedSnd[idx++] = (byte) ((val & 0xff00) >>> 8);
             }
-
             for (int i = ramp; i < numSamples - ramp; i++) {
                 // scale to maximum amplitude
-                final short val = (short) ((sample[i] * 32767));
+                final short val = (short) ((sample[i] * 32767) * 0.5);
                 // in 16 bit wav PCM, first byte is the low order byte
                 generatedSnd[idx++] = (byte) (val & 0x00ff);
                 generatedSnd[idx++] = (byte) ((val & 0xff00) >>> 8);
@@ -233,7 +232,7 @@ public class MainActivity {
 
             for (int i = numSamples - ramp; i < numSamples; i++) {
                 // scale to maximum amplitude
-                final short val = (short) ((sample[i] * 32767) * (numSamples - i) / (ramp * extraRampFactor));
+                final short val = (short) ((sample[i] * 32767) * (1/(1+ Math.pow(1.005,i-numSamples)) - 0.5));
                 // in 16 bit wav PCM, first byte is the low order byte
                 generatedSnd[idx++] = (byte) (val & 0x00ff);
                 generatedSnd[idx++] = (byte) ((val & 0xff00) >>> 8);
